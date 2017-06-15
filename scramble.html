@@ -7,8 +7,23 @@
     <h1>A JavaScript Word Scramble Game</h1>
 
     <script>
+        
+        function scramble(eggs) {
+
+            var scrambled_eggs = [];
+            eggs = eggs.split('');
+
+            while (eggs.length > 0) {
+                var index = Math.floor(Math.random() * eggs.length);
+                scrambled_eggs.push(eggs[index]);
+                eggs.splice(index, 1);
+            } 
+
+            return scrambled_eggs.join('');
+        }
+
+
         var WORDS     = ["booger", "apple", "hackbright", "mango", "parrot", "spider", "otters", "panda"];
-        var SCRAMBLED = ["oogreb", "papel", "backrhight", "goman", "tarrop", "derpis", "tetors", "danpa"];
 
         var playing = true;
 
@@ -20,21 +35,27 @@
             
             var get_word = WORDS[index];
             // Grab the corresponding scrambled word from the SCRAMBLED array.
-            var scr_word = SCRAMBLED[index];
+            var scr_word = scramble(get_word);
             
             // Prompt the user to guess the original word when given the scrambled word.
             // alert(get_word);
-            var msg =  "Scrambled word: " + scr_word + ".\nCan you guess the word?";
-            var response = prompt(msg).trim().toLowerCase();
+            var keep_guessing = true;
+            while (keep_guessing) {
+                var msg =  "Can you guess the scrambled word: " + scr_word;
+                var response = prompt(msg).trim().toLowerCase();
 
-            // If the user guesses wrong, tell them they were wrong and show the right word.
-            if (response === get_word) {
-                msg = 'Congratulations! You guessed the word!';
+                // If the user guesses wrong, tell them they were wrong and show the right word.
+                if (response === get_word) {
+                    alert('Congratulations! You guessed the word!');
+                    keep_guessing = false;
+                }
+                else {
+                    keep_guessing = confirm("Incorrect! Would you like to try again?\nOK to keep guessing, cancel to quit this round.")
+                    if (!keep_guessing) {
+                        alert("Word to unscramble was: " + get_word);
+                    }
+                }
             }
-            else {
-                msg = "Better luck next time!\nCorrect word is: " + get_word + ".";
-            }
-            alert(msg);
             // If the user guesses the correct word, congratulate them.
 
             playing = confirm("Press OK To keep playing or Cancel to quit");
